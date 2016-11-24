@@ -1,5 +1,6 @@
 package org.springframework.cloud.servicebroker.controller;
 
+import org.junit.runner.Result;
 import org.springframework.cloud.servicebroker.model.Catalog;
 import org.springframework.cloud.servicebroker.model.Plan;
 import org.springframework.cloud.servicebroker.model.ServiceDefinition;
@@ -15,6 +16,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.Collections;
@@ -59,12 +61,15 @@ public class CatalogControllerIntegrationTest {
 		ServiceDefinition service = ServiceFixture.getSimpleService();
 		List<Plan> plans = PlanFixture.getAllPlans();
 
+		ResultActions ra = mockMvc.perform(get("/v2/catalog"));
+
+
 		this.mockMvc.perform(get("/v2/catalog")
 				.accept(MediaType.APPLICATION_JSON))
 				.andDo(print())
 				.andExpect(status().isOk())
 				.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-				.andExpect(jsonPath("$.services.", hasSize(1)))
+				.andExpect(jsonPath("$.services", hasSize(1)))
 				.andExpect(jsonPath("$.services[*].id", contains(service.getId())))
 				.andExpect(jsonPath("$.services[*].name", contains(service.getName())))
 				.andExpect(jsonPath("$.services[*].description", contains(service.getDescription())))
@@ -88,7 +93,7 @@ public class CatalogControllerIntegrationTest {
 				.andDo(print())
 				.andExpect(status().isOk())
 				.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-				.andExpect(jsonPath("$.services.", hasSize(1)))
+				.andExpect(jsonPath("$.services", hasSize(1)))
 				.andExpect(jsonPath("$.services[*].id", contains(service.getId())))
 				.andExpect(jsonPath("$.services[*].name", contains(service.getName())))
 				.andExpect(jsonPath("$.services[*].description", contains(service.getDescription())))
@@ -124,7 +129,7 @@ public class CatalogControllerIntegrationTest {
 				.andDo(print())
 				.andExpect(status().isOk())
 				.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-				.andExpect(jsonPath("$.services.", hasSize(1)))
+				.andExpect(jsonPath("$.services", hasSize(1)))
 				.andExpect(jsonPath("$.services[*].id", contains(service.getId())))
 				.andExpect(jsonPath("$.services[*].name", contains(service.getName())))
 				.andExpect(jsonPath("$.services[*].description", contains(service.getDescription())))

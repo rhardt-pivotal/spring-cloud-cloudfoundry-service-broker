@@ -35,7 +35,7 @@ public class BrokerApiVersionInterceptorIntegrationTest {
 		mockWithExpectedVersion().perform(get(CATALOG_PATH)
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isPreconditionFailed())
-				.andExpect(jsonPath("$.description.", containsString("expected-version")));
+				.andExpect(jsonPath("$.description", containsString("expected-version")));
 	}
 
 	@Test
@@ -44,8 +44,8 @@ public class BrokerApiVersionInterceptorIntegrationTest {
 				.header(DEFAULT_API_VERSION_HEADER, "wrong-version")
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isPreconditionFailed())
-				.andExpect(jsonPath("$.description.", containsString("expected-version")))
-				.andExpect(jsonPath("$.description.", containsString("wrong-version")));
+				.andExpect(jsonPath("$.description", containsString("expected-version")))
+				.andExpect(jsonPath("$.description", containsString("wrong-version")));
 	}
 
 	@Test
