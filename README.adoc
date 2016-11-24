@@ -1,3 +1,6 @@
+= Preface
+
+This is an implementation of this service broker for Kafka.  Right now it just passes the credentials of an unsecured, completely wide open shared instance of Kafka to a Cloud Foundry app.  Stay tuned.
 
 = Overview
 
