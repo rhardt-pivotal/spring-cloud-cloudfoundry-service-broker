@@ -61,6 +61,7 @@ public class KafkaSBConfig {
         sdMetadata.put("providerDisplayName", "Pivotal");
         sdMetadata.put("documentationUrl", "https://docs.pivotal.io");
         sdMetadata.put("supportUrl", "https://docs.pivotal.io");
+        sdMetadata.put("costs", getCosts());
         return sdMetadata;
     }
 
