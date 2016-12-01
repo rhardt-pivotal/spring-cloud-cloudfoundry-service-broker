@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import lombok.extern.slf4j.Slf4j;
+
 
 /**
  * Default implementation of ServiceInstanceBindingService for service brokers that do not support bindable services.
@@ -21,6 +23,7 @@ import java.util.Map;
  * @author Scott Frederick, Vinicius Carvalho, Rob Hardt
  */
 @Component
+@Slf4j
 public class KafkaServiceInstanceBindingService implements ServiceInstanceBindingService {
 
 	@Autowired
@@ -74,6 +77,8 @@ public class KafkaServiceInstanceBindingService implements ServiceInstanceBindin
 	public void deleteServiceInstanceBinding(DeleteServiceInstanceBindingRequest request) {
 
 		byte[] body = client.get(BINDINGS_PATH+"/"+request.getBindingId());
+		log.info("got body");
+		log.info(new String(body));
 		if(body == null) {
 			throw new ServiceInstanceBindingDoesNotExistException(request.getBindingId());
 		}

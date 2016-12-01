@@ -2,6 +2,7 @@ package org.springframework.cloud.servicebroker.kafka.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.servicebroker.exception.ServiceInstanceDoesNotExistException;
 import org.springframework.cloud.servicebroker.model.*;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @AllArgsConstructor
+@Slf4j
 public class KafkaServiceInstanceService implements ServiceInstanceService {
 
     public final static String INSTANCES_PATH = "/sb/instances";
@@ -51,14 +53,23 @@ public class KafkaServiceInstanceService implements ServiceInstanceService {
 
     @Override
     public DeleteServiceInstanceResponse deleteServiceInstance(DeleteServiceInstanceRequest request) {
-        ServiceInstance existing = null;
+        byte[] existing = null;
         String instanceId = request.getServiceInstanceId();
         try{
-            byte[] body = client.get(INSTANCES_PATH+"/"+instanceId);
-            existing = mapper.readValue(body, ServiceInstance.class);
+            existing = client.get(INSTANCES_PATH+"/"+instanceId);
+            if (existing == null) {
+                log.info(String.format("No instance with id: %s", instanceId));
+            }
+            else {
+                log.info("got instance");
+                log.info(new String(existing));
+            }
         }
         catch (Exception e) {
-            throw new RuntimeException("Could not read/deserialize json payload");
+            e.printStackTrace();
+            log.error(e.toString());
+            //don't rethrow, just log
+            //throw new RuntimeException("Could not read/deserialize json payload");
         }
 
         if (existing == null) {
